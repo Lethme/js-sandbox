@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    min-height: 100vh;
+}
+
+.label-text {
+    margin: 0;
+}
+
+.dialog-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.btn-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2em;
+    justify-content: flex-end;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: .7em;
+}
+
+.input-wrapper.row {
+    flex-direction: row;
+}
+
+@supports (backdrop-filter: blur()) {
+    .p-dialog.p-component,
+    .p-dialog .p-component {
+        backdrop-filter: blur(0.3em);
+    }
+
+    .p-dialog.p-component [class*="-content"],
+    .p-dialog.p-component [class*="-header"],
+    .p-dialog.p-component [class*="-action"],
+    .p-dialog.p-component [class*="-header-link"],
+    .p-dialog input.p-component
+    {
+        background: unset !important;
+    }
+}
+
+[class^="icon-"], [class*=" icon-"], .pi {
+    transition: all .1s ease;
+}
+[class^="icon-"].disabled, [class*=" icon-"].disabled, .pi.disabled {
+    color: var(--gray-600);
+}
+[class^="icon-"].hoverable:hover, [class^="icon-"].hoverable:active, [class*=" icon-"].hoverable:hover, [class*=" icon-"].hoverable:active, .pi.hoverable:hover, .pi.hoverable:active {
+    color: var(--primary-color);
+}
+[class^="icon-"].clickable, [class*=" icon-"].clickable, .pi.clickable {
+    cursor: pointer;
+}
+[class^="icon-"].clickable:hover, [class^="icon-"].clickable:active, [class*=" icon-"].clickable:hover, [class*=" icon-"].clickable:active, [class^="icon-"].clickable.active, .pi.clickable:hover, .pi.clickable:active, .pi.clickable.active {
+    color: var(--primary-color);
+}
+[class^="icon-"].clickable.danger, [class*=" icon-"].clickable.danger, .pi.clickable.danger {
+    cursor: pointer;
+    color: initial;
+}
+[class^="icon-"].clickable.danger:hover, [class^="icon-"].clickable.danger:active, [class*=" icon-"].clickable.danger:hover, [class*=" icon-"].clickable.danger:active, .pi.clickable.danger:hover, .pi.clickable.danger:active {
+    color: #f3426c;
+}
+[class^="icon-"].clickable.danger-all, [class*=" icon-"].clickable.danger-all, .pi.clickable.danger-all {
+    cursor: pointer;
+    color: #f3426c;
+}
+[class^="icon-"].clickable.danger-all:hover, [class^="icon-"].clickable.danger-all:active, [class*=" icon-"].clickable.danger-all:hover, [class*=" icon-"].clickable.danger-all:active, .pi.clickable.danger-all:hover, .pi.clickable.danger-all:active {
+    color: #d2385c;
+}

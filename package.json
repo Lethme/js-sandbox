@@ -7,8 +7,18 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@codemirror/lang-html": "^6.4.4",
+    "@codemirror/lang-javascript": "^6.1.9",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@types/jquery": "^3.5.16",
+    "codemirror": "^6.0.1",
     "core-js": "^3.8.3",
+    "jquery": "^3.7.0",
+    "primeicons": "^6.0.1",
+    "primevue": "^3.29.2",
     "vue": "^3.2.13",
+    "vue-codemirror": "^6.1.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

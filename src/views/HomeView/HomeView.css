@@ -1,0 +1,90 @@
+.tab-header-title {
+    font-size: .7em;
+}
+
+.pi.tab-header-icon {
+    margin-right: 5px;
+    font-size: .7em;
+}
+
+.pi.tab-header-close {
+    font-size: .6em;
+    margin-left: 10px;
+    color: gray;
+}
+
+.pi.tab-header-add {
+    font-size: .7em;
+}
+
+.p-tabview {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100vh;
+}
+
+.p-tabview-panels,
+.p-tabview-panel {
+    display: flex;
+    flex: 1;
+    max-width: 100%;
+}
+
+.p-tabview-nav-container {
+    top: 0;
+    position: sticky;
+    z-index: 1100;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .3);
+}
+
+.tab-wrapper {
+    display: flex;
+    flex: 1;
+}
+
+.tab-wrapper.horizontal {
+    flex-direction: row;
+}
+
+.tab-wrapper.vertical {
+    flex-direction: column;
+}
+
+.v-codemirror,
+.p-terminal.p-component {
+    font-size: .8em;
+}
+
+.p-terminal,
+.p-terminal .p-terminal-input {
+    font-family: monospace !important;
+}
+
+.p-terminal input.p-terminal-input {
+    font-size: 1em;
+}
+
+.tab-wrapper > * {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.tab-header-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.tab-view-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    position: sticky;
+    top: 3.2em;
+
+    padding: .5em .3em .5em 1em;
+}
