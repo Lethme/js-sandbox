@@ -1,34 +1,36 @@
 <template>
-    <TabView :scrollable="true" v-model:activeIndex="activeTabIndex" @tab-change="editorChangeDebounced(activeTabCode)">
-        <TabPanel v-for="(tab, index) in tabs" :key="tab.title">
-            <template #header>
-                <div class="tab-header-wrapper" @mousedown.middle="closeTab(index)" @dblclick="tabDblClick(index)">
-                    <i class="pi pi-file tab-header-icon"></i>
-                    <span class="tab-header-title">{{ tab.title }}</span>
-                    <i class="pi pi-times tab-header-close clickable" @click.stop="closeTab(index)"></i>
-                </div>
-            </template>
-            <Splitter @resizeend="(event) => { tab.editorLayoutSize = event.sizes[0]; tab.terminalLayoutSize = event.sizes[1] }"
-                      :layout="tab.editorLayout" :class="{ 'tab-wrapper': true, [tab.editorLayout]: true }" style="max-width: 100%; overflow: auto">
-                <SplitterPanel :size="tab.editorLayoutSize" :minSize="20" class="editor-wrapper">
-                    <codemirror
-                        v-model="tab.content"
-                        style="height: 100%; width: 100%; overflow-y: auto;"
-                        placeholder="Code goes here..."
-                        :autofocus="true"
-                        :indent-with-tab="true"
-                        :tab-size="4"
-                        :extensions="editorExtensions"
-                        @change="editorChangeDebounced($event)"
-                    />
-                </SplitterPanel>
-                <SplitterPanel :size="tab.terminalLayoutSize" :minSize="20" class="terminal-wrapper">
-                    <Terminal prompt=">> " style="height: 100%"/>
-                </SplitterPanel>
-            </Splitter>
-            <div class="tab-view-controls-wrapper">
-                <div class="tab-view-controls sticky">
-                    <i :class="{
+    <div class="home-wrapper">
+        <Tree />
+        <TabView :scrollable="true" v-model:activeIndex="activeTabIndex" @tab-change="editorChangeDebounced(activeTabCode)">
+            <TabPanel v-for="(tab, index) in tabs" :key="tab.title">
+                <template #header>
+                    <div class="tab-header-wrapper" @mousedown.middle="closeTab(index)" @dblclick="tabDblClick(index)">
+                        <i class="pi pi-file tab-header-icon"></i>
+                        <span class="tab-header-title">{{ tab.title }}</span>
+                        <i class="pi pi-times tab-header-close clickable" @click.stop="closeTab(index)"></i>
+                    </div>
+                </template>
+                <Splitter @resizeend="(event) => { tab.editorLayoutSize = event.sizes[0]; tab.terminalLayoutSize = event.sizes[1] }"
+                          :layout="tab.editorLayout" :class="{ 'tab-wrapper': true, [tab.editorLayout]: true }" style="max-width: 100%; overflow: auto">
+                    <SplitterPanel :size="tab.editorLayoutSize" :minSize="20" class="editor-wrapper">
+                        <codemirror
+                            v-model="tab.content"
+                            style="height: 100%; width: 100%; overflow-y: auto;"
+                            placeholder="Code goes here..."
+                            :autofocus="true"
+                            :indent-with-tab="true"
+                            :tab-size="4"
+                            :extensions="editorExtensions"
+                            @change="editorChangeDebounced($event)"
+                        />
+                    </SplitterPanel>
+                    <SplitterPanel :size="tab.terminalLayoutSize" :minSize="20" class="terminal-wrapper">
+                        <Terminal prompt=">> " style="height: 100%"/>
+                    </SplitterPanel>
+                </Splitter>
+                <div class="tab-view-controls-wrapper">
+                    <div class="tab-view-controls sticky">
+                        <i :class="{
                         'pi': true,
                         'pi-file': true,
                         'clickable': true,
@@ -57,6 +59,16 @@
                         />
                         <i :class="{
                         'pi': true,
+                        'pi-eraser': true,
+                        'clickable': true,
+                        'active': tab.editorAutoClearOutput
+                    }"
+                           @click="clearCurrentTerminal"
+                           @mousedown.middle="tab.editorAutoClearOutput = !tab.editorAutoClearOutput"
+                           v-tooltip.left="{ value: `<h4 class='label-text' style='font-weight: 400'>Clear console output</h4><h5 class='label-text'>Middle click to toggle auto clear output</h5>`, escape: true }"
+                        />
+                        <i :class="{
+                        'pi': true,
                         'pi-save': true,
                         'clickable': true,
                         'active': autoSave
@@ -64,11 +76,12 @@
                            @click="$store.dispatch('saveTabs')"
                            @mousedown.middle="autoSave = !autoSave"
                            v-tooltip.left="{ value: `<h4 class='label-text' style='font-weight: 400'>Save files</h4><h5 class='label-text'>Middle click to toggle autosave</h5>`, escape: true }"
-                    />
+                        />
+                    </div>
                 </div>
-            </div>
-        </TabPanel>
-    </TabView>
+            </TabPanel>
+        </TabView>
+    </div>
 
     <Dialog v-model:visible="newTabModalVisible" modal dismissableMask header="Create file" :style="{ width: 'auto', maxWidth: $store.getters.mobile ? '95%' : '700px' }">
         <div class="dialog-wrapper">
@@ -98,6 +111,12 @@
                                     v-model="newTabModalAutorun"
                                 />
                                 <h5 class="label-text">{{ newTabModalAutorun ? 'Autorun code on edit' : 'Run code manually' }}</h5>
+                            </div>
+                            <div class="input-wrapper row" style="padding: .2em 0">
+                                <InputSwitch
+                                    v-model="newTabModalAutoClearOutput"
+                                />
+                                <h5 class="label-text">{{ newTabModalAutoClearOutput ? 'Clear console output on edit' : 'Clear console output manually' }}</h5>
                             </div>
                         </div>
                     </AccordionTab>
@@ -139,6 +158,12 @@
                                 />
                                 <h5 class="label-text">{{ editTabModalAutorun ? 'Autorun code on edit' : 'Run code manually' }}</h5>
                             </div>
+                            <div class="input-wrapper row" style="padding: .2em 0">
+                                <InputSwitch
+                                    v-model="editTabModalAutoClearOutput"
+                                />
+                                <h5 class="label-text">{{ editTabModalAutoClearOutput ? 'Clear console output on edit' : 'Clear console output manually' }}</h5>
+                            </div>
                         </div>
                     </AccordionTab>
                 </Accordion>
@@ -164,6 +189,8 @@ import Button from "primevue/button";
 import Dialog from 'primevue/dialog';
 import InputText from "primevue/inputtext";
 import InputSwitch from 'primevue/inputswitch';
+
+import Tree from 'primevue/tree';
 
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
@@ -202,6 +229,7 @@ export default defineComponent({
         Accordion,
         AccordionTab,
         InputSwitch,
+        Tree,
         Codemirror,
     },
     setup() {
@@ -233,6 +261,7 @@ export default defineComponent({
         const newTabModalFileNameRef = ref();
         const newTabModalLayout = ref<'horizontal' | 'vertical'>('vertical');
         const newTabModalAutorun = ref(true);
+        const newTabModalAutoClearOutput = ref(true);
 
         const editTabIndex = ref<number | undefined>();
         const editTabModalVisible = ref(false);
@@ -240,6 +269,7 @@ export default defineComponent({
         const editTabModalFileNameRef = ref();
         const editTabModalLayout = ref<'horizontal' | 'vertical'>('vertical');
         const editTabModalAutorun = ref(true);
+        const editTabModalAutoClearOutput = ref(true);
 
         const editorExtensions = [javascript(), oneDark];
 
@@ -249,6 +279,7 @@ export default defineComponent({
                 content: "",
                 editorAutorun: newTabModalAutorun.value,
                 editorLayout: newTabModalLayout.value,
+                editorAutoClearOutput: newTabModalAutoClearOutput.value,
                 editorLayoutSize: 80,
                 terminalLayoutSize: 20,
             } as ITab);
@@ -279,6 +310,7 @@ export default defineComponent({
             const tab = tabs.value[index];
             editTabIndex.value = index;
             editTabModalAutorun.value = tab.editorAutorun;
+            editTabModalAutoClearOutput.value = tab.editorAutoClearOutput;
             editTabModalLayout.value = tab.editorLayout;
             editTabModalFileName.value = tab.title.split('.')[0];
             editTabModalVisible.value = true;
@@ -291,6 +323,7 @@ export default defineComponent({
                 tab.title = editTabModalFileName.value ? `${editTabModalFileName.value.replace(/ /g, '_')}.js` : 'index.js';
                 tab.editorLayout = editTabModalLayout.value;
                 tab.editorAutorun = editTabModalAutorun.value;
+                tab.editorAutoClearOutput = editTabModalAutoClearOutput.value;
                 editTabModalVisible.value = false;
                 editTabIndex.value = undefined;
             }
@@ -300,6 +333,7 @@ export default defineComponent({
             await addTab();
             newTabModalVisible.value = false;
             newTabModalAutorun.value = true;
+            newTabModalAutoClearOutput.value = true;
             newTabModalLayout.value = "vertical";
             newTabModalFileName.value = '';
 
@@ -347,6 +381,8 @@ export default defineComponent({
         }
 
         const editorChange = async (code: string, force = false) => {
+            activeTab.value.editorAutoClearOutput && clearCurrentTerminal();
+
             if (activeTab.value.editorAutorun || force) {
                 clearCurrentTerminal();
 
@@ -530,6 +566,7 @@ export default defineComponent({
             newTabModalFileName,
             newTabModalLayout,
             newTabModalAutorun,
+            newTabModalAutoClearOutput,
             newTabModalFileNameRef,
             editTabIndex,
             editTabModalVisible,
@@ -537,6 +574,8 @@ export default defineComponent({
             editTabModalFileNameRef,
             editTabModalLayout,
             editTabModalAutorun,
+            editTabModalAutoClearOutput,
+            clearCurrentTerminal,
             addTab,
             closeTab,
             tabDblClick,

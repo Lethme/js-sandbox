@@ -51,6 +51,7 @@ const mutations = {
 				content: "",
 				editorAutorun: true,
 				editorLayout: "vertical",
+				editorAutoClearOutput: true,
 				editorLayoutSize: 80,
 				terminalLayoutSize: 20,
 			})
@@ -81,6 +82,7 @@ const mutations = {
 				title: "index.js",
 				content: "",
 				editorAutorun: true,
+				editorAutoClearOutput: true,
 				editorLayout: "vertical",
 				editorLayoutSize: 80,
 				terminalLayoutSize: 20,

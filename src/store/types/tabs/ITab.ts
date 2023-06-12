@@ -6,6 +6,7 @@ export interface ITab {
     content: string;
     editorLayout: 'horizontal' | 'vertical';
     editorAutorun: boolean;
+    editorAutoClearOutput: boolean;
     editorLayoutSize: number;
     terminalLayoutSize: number;
 }
